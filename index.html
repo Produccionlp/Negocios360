@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Negocios 360 · Participación en vivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Hind:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+/* ── Tokens del Hub (tokens.css) ── */
+:root {
+  --azul:       #1a3a6b;
+  --azul-mid:   #2f5496;
+  --celeste:    #0096c7;
+  --celeste-lt: #e8f4fd;
+  --gris-bg:    #f4f6f9;
+  --gris-bd:    #dde3ec;
+  --gris-txt:   #5a6478;
+  --blanco:     #ffffff;
+  --verde:      #1a8754;
+  --verde-lt:   #d1f0e0;
+  --naranja:    #c55a11;
+  --naranja-lt: #fde8d8;
+  --rojo:       #c0392b;
+  --rojo-lt:    #fde8e6;
+  --amarillo-lt:#fff8e1;
+  --font-sans:    'DM Sans', -apple-system, sans-serif;
+  --font-titulos: 'Hind', -apple-system, sans-serif;
+  --sombra:     0 2px 12px rgba(26,58,107,.10);
+  --sombra-md:  0 4px 24px rgba(26,58,107,.15);
+  --radio:      10px;
+  --radio-lg:   16px;
+  --trans:      .18s ease;
+  --tinta:      #1e2733;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--gris-bg); color: var(--tinta); font-size: 14px;
+  -webkit-font-smoothing: antialiased; min-height: 100vh; min-height: 100dvh; }
+button { font-family: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--celeste); outline-offset: 2px; }
+.oculto { display: none !important; }
+.etiqueta { font-size: 11px; text-transform: uppercase; letter-spacing: .7px; color: var(--gris-txt); font-weight: 600; }
+.pulso { animation: pulso 1.4s ease-in-out infinite; }
+@keyframes pulso { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ── Topbar (styles.css) ── */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--azul), #23498a);
+  color: var(--blanco); box-shadow: var(--sombra-md);
+}
+.topbar-title { font-family: var(--font-titulos); font-weight: 600; font-size: 20px; line-height: 1.15; }
+.topbar-sub { font-size: 12.5px; opacity: .8; margin-top: 1px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; font-size: 13px; flex-wrap: wrap; justify-content: flex-end; }
+.topbar-badge { background: rgba(255,255,255,.14); border-radius: 999px; padding: 4px 12px; font-size: 12px; white-space: nowrap; }
+.topbar-badge.vivo { background: var(--verde-lt); color: var(--verde); font-weight: 600; }
+.topbar-badge.local { background: var(--amarillo-lt); color: #8a6d00; font-weight: 600; }
+
+/* ── Botones (styles.css) ── */
+.btn-primary, .btn-outline, .btn-danger {
+  font-family: inherit; font-size: 13.5px; padding: 8px 16px;
+  border-radius: 8px; cursor: pointer; transition: all var(--trans);
+}
+.btn-primary { background: var(--azul-mid); color: var(--blanco); border: 1px solid var(--azul-mid); }
+.btn-primary:hover { background: var(--azul); border-color: var(--azul); }
+.btn-outline { background: var(--blanco); color: var(--tinta); border: 1px solid var(--gris-bd); }
+.btn-outline:hover { border-color: var(--celeste); color: var(--azul-mid); }
+.btn-danger { background: var(--blanco); color: var(--rojo); border: 1px solid var(--gris-bd); }
+.btn-danger:hover { border-color: var(--rojo); background: var(--rojo-lt); }
+.btn-grande { padding: 13px 18px; font-size: 15px; font-weight: 600; border-radius: var(--radio); }
+.btn-ancho { width: 100%; }
+button[disabled] { opacity: .45; cursor: default; }
+.btn-primary[disabled]:hover { background: var(--azul-mid); border-color: var(--azul-mid); }
+.btn-outline[disabled]:hover { border-color: var(--gris-bd); color: var(--tinta); }
+
+/* ── Inputs (styles.css) ── */
+input { font-family: inherit; font-size: 13.5px; padding: 8px 10px; border: 1px solid var(--gris-bd);
+  border-radius: 8px; background: var(--blanco); transition: border-color var(--trans); width: 100%; }
+input:focus { outline: none; border-color: var(--celeste); }
+
+/* ── Tarjetas ── */
+.tarjeta { background: var(--blanco); border-radius: var(--radio-lg); box-shadow: var(--sombra); padding: 18px 20px; min-width: 0; }
+.tarjeta h3 { font-family: var(--font-titulos); font-weight: 600; color: var(--azul-mid);
+  font-size: clamp(17px, 1.45vw, 22px); line-height: 1.25; margin-bottom: 16px; }
+.vacio { color: var(--gris-txt); font-size: 14px; padding: 18px 0; text-align: center; }
+
+/* ── Toasts (styles.css) ── */
+.toasts { position: fixed; right: 18px; bottom: 18px; display: flex; flex-direction: column; gap: 8px; z-index: 200; }
+.toast { padding: 11px 16px; border-radius: var(--radio); color: var(--blanco); font-size: 13.5px;
+  box-shadow: var(--sombra-md); animation: slideUp .2s ease; max-width: 380px; }
+.toast-neutral { background: var(--azul-mid); }
+.toast-success { background: var(--verde); }
+.toast-error { background: var(--rojo); }
+
+/* ── Participante ── */
+.envoltorio { max-width: 620px; margin: 0 auto; padding: 20px 16px 28px; }
+.part-titulo { font-family: var(--font-titulos); font-weight: 600; font-size: 26px; color: var(--azul);
+  line-height: 1.15; margin: 4px 0 18px; }
+.preg { margin-bottom: 24px; }
+.preg h2 { font-family: var(--font-titulos); font-weight: 600; font-size: 20px; line-height: 1.25;
+  color: var(--azul-mid); margin-bottom: 4px; }
+.preg-ayuda { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--gris-txt); margin-bottom: 10px; }
+.preg-ayuda .lleno { color: var(--celeste); font-weight: 600; }
+.opcion { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left;
+  background: var(--blanco); border: 1px solid var(--gris-bd); border-radius: var(--radio);
+  padding: 14px 16px; margin-bottom: 8px; font-size: 15.5px; line-height: 1.4; color: var(--tinta);
+  transition: border-color var(--trans), background var(--trans), box-shadow var(--trans); }
+.opcion:hover:not([disabled]) { border-color: var(--celeste); }
+.opcion[aria-pressed="true"] { border-color: var(--celeste); background: var(--celeste-lt); box-shadow: inset 0 0 0 1px var(--celeste); }
+.marca { flex: none; width: 20px; height: 20px; margin-top: 1px; border: 2px solid var(--gris-bd);
+  border-radius: 50%; display: grid; place-items: center; background: var(--blanco); transition: all var(--trans); }
+.marca.cuadrada { border-radius: 5px; }
+.opcion[aria-pressed="true"] .marca { border-color: var(--celeste); background: var(--celeste); }
+.opcion[aria-pressed="true"] .marca::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--blanco); }
+.opcion[aria-pressed="true"] .marca.cuadrada::after { width: 5px; height: 10px; border-radius: 0; background: none;
+  border: solid var(--blanco); border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.barra-fija { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--gris-bg) 30%); padding: 22px 0 10px; }
+.aviso { margin-top: 10px; padding: 11px 14px; border-radius: var(--radio); background: var(--rojo-lt); color: var(--rojo); font-size: 14px; }
+.centrado { min-height: calc(100vh - 64px); min-height: calc(100dvh - 64px); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 30px 24px; }
+.centrado h2 { font-family: var(--font-titulos); font-weight: 600; font-size: 28px; color: var(--azul); margin: 0 0 8px; }
+.centrado p { color: var(--gris-txt); font-size: 15.5px; max-width: 340px; line-height: 1.5; }
+.puntos { display: flex; gap: 7px; margin-bottom: 22px; }
+.puntos span { width: 12px; height: 12px; border-radius: 3px; background: var(--celeste); }
+.ok-icono { width: 56px; height: 56px; border-radius: 50%; background: var(--verde-lt); color: var(--verde);
+  display: grid; place-items: center; font-size: 28px; font-weight: 700; margin-bottom: 18px; }
+
+/* ── Presentador ── */
+.escena { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.escena-cuerpo { flex: 1; width: 100%; max-width: 1536px; margin: 0 auto; padding: 22px 28px 18px;
+  display: flex; flex-direction: column; min-height: 0; }
+.escena-cab { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
+.titulo-grande { font-family: var(--font-titulos); font-weight: 600; color: var(--azul);
+  font-size: clamp(26px, 3.1vw, 46px); line-height: 1.08; margin-top: 4px; }
+.bajada { color: var(--gris-txt); font-size: clamp(14px, 1.2vw, 18px); margin-top: 4px; }
+.cab-der { display: flex; align-items: center; gap: 18px; }
+.contador-grande { text-align: right; }
+.contador-grande b { display: block; font-family: var(--font-titulos); font-weight: 700; color: var(--azul);
+  font-size: clamp(32px, 3.4vw, 54px); line-height: 1; font-variant-numeric: tabular-nums; }
+.qr-chico { background: var(--blanco); padding: 6px; border-radius: 8px; box-shadow: var(--sombra); }
+.qr img, .qr canvas { display: block; }
+
+.graf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.b-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 320px); gap: 18px; align-items: start; }
+.fila-barra { margin-bottom: 13px; }
+.fila-barra:last-child { margin-bottom: 0; }
+.fila-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 5px; }
+.fila-txt { font-size: clamp(13.5px, 1.15vw, 17px); line-height: 1.3; }
+.fila-num { flex: none; font-variant-numeric: tabular-nums; color: var(--gris-txt); font-size: clamp(13px, 1.1vw, 16px); }
+.fila-num b { color: var(--azul); }
+.pista { height: 12px; background: var(--gris-bg); border-radius: 6px; overflow: hidden; }
+.relleno { height: 100%; background: var(--azul-mid); border-radius: 6px; transition: width .5s cubic-bezier(.2,.7,.3,1); }
+.relleno.lider { background: var(--celeste); }
+
+.vista-ctl { display: inline-flex; background: var(--blanco); border: 1px solid var(--gris-bd); border-radius: 8px; padding: 3px; margin-top: 12px; }
+.vista-ctl button { border: 0; background: none; padding: 6px 16px; border-radius: 6px; font-size: 13px; color: var(--gris-txt); font-weight: 600; }
+.vista-ctl button.activo { background: var(--azul-mid); color: var(--blanco); }
+
+/* ── Matriz de calor ── */
+.matriz-wrap { overflow-x: auto; }
+table.matriz { border-collapse: separate; border-spacing: 4px; width: 100%; table-layout: fixed; min-width: 620px; }
+.matriz th { font-weight: 600; color: var(--gris-txt); font-size: clamp(11.5px, .95vw, 14px); line-height: 1.2; padding: 4px 6px; }
+.matriz thead th { text-align: center; vertical-align: bottom; }
+.matriz tbody th { text-align: right; width: 21%; }
+.matriz th.esquina { text-align: left; font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; color: #9aa4b5; }
+.matriz td { height: clamp(36px, 5.2vh, 58px); border-radius: 8px; text-align: center; font-weight: 700;
+  font-size: clamp(14px, 1.3vw, 20px); font-variant-numeric: tabular-nums; transition: background .4s ease; }
+.matriz td.cero { background: var(--gris-bg); color: #b5bfcd; font-weight: 400; }
+.leyenda-escala { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--gris-txt); margin-top: 12px; }
+.leyenda-escala i { display: block; width: 130px; height: 10px; border-radius: 5px;
+  background: linear-gradient(90deg, rgb(203,232,246), var(--celeste), var(--azul)); }
+.conexion { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--gris-bd); }
+.conexion:last-child { border-bottom: 0; }
+.conexion .pos { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--celeste-lt); color: var(--azul-mid);
+  display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+.conexion:first-child .pos { background: var(--celeste); color: var(--blanco); }
+.conexion .par { flex: 1; min-width: 0; font-size: clamp(13.5px, 1.1vw, 16px); line-height: 1.3; }
+.conexion .par b { display: block; color: var(--azul); }
+.conexion .par span { color: var(--gris-txt); }
+.conexion .n { flex: none; font-family: var(--font-titulos); font-weight: 700; font-size: clamp(20px, 1.8vw, 28px); color: var(--azul); }
+
+/* ── Pantalla de espera ── */
+.espera { flex: 1; display: grid; grid-template-columns: auto minmax(0, 560px); gap: 56px; align-items: center; justify-content: center; }
+.qr-caja { background: var(--blanco); padding: 20px; border-radius: var(--radio-lg); box-shadow: var(--sombra-md); }
+.espera-txt { color: var(--gris-txt); font-size: clamp(16px, 1.4vw, 20px); margin: 18px 0 6px; }
+.url-txt { font-family: ui-monospace, monospace; font-size: clamp(15px, 1.4vw, 21px); color: var(--azul-mid);
+  font-weight: 600; word-break: break-all; }
+.espera-nota { color: var(--gris-txt); font-size: 14px; margin-top: 18px; line-height: 1.5; }
+
+.tapado { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 10px; padding: 50px 20px; background: var(--blanco); border-radius: var(--radio-lg);
+  box-shadow: var(--sombra); }
+.tapado h3 { font-family: var(--font-titulos); font-weight: 600; font-size: 24px; color: var(--azul); }
+.tapado p { color: var(--gris-txt); font-size: 15px; max-width: 360px; line-height: 1.5; }
+
+/* ── Consola del presentador ── */
+.consola { background: var(--blanco); border-top: 1px solid var(--gris-bd); box-shadow: 0 -2px 12px rgba(26,58,107,.06); }
+.consola-toggle { width: 100%; background: none; border: 0; padding: 9px 0; }
+.consola-int { max-width: 1536px; margin: 0 auto; padding: 0 28px 16px; }
+.tabs-consola { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.tab-m { border: 1px solid var(--gris-bd); background: var(--blanco); color: var(--tinta); border-radius: 8px;
+  padding: 8px 14px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all var(--trans); }
+.tab-m:hover { border-color: var(--celeste); color: var(--azul-mid); }
+.tab-m.activa { background: var(--azul-mid); border-color: var(--azul-mid); color: var(--blanco); }
+.tab-m .cnt { font-size: 11.5px; font-weight: 600; background: var(--celeste-lt); color: var(--azul-mid); border-radius: 999px; padding: 1px 8px; }
+.tab-m.activa .cnt { background: rgba(255,255,255,.18); color: var(--blanco); }
+.acciones { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.atajos { font-size: 11.5px; color: var(--gris-txt); margin-top: 10px; }
+.atajos kbd { font-family: inherit; background: var(--gris-bg); border: 1px solid var(--gris-bd); border-radius: 4px; padding: 0 5px; }
+
+/* ── Clave ── */
+.clave-caja { width: 100%; max-width: 320px; }
+.clave-caja input { margin-top: 12px; font-size: 20px; letter-spacing: .2em; text-align: center; padding: 14px; border-radius: var(--radio); }
+.clave-err { font-size: 13px; color: var(--rojo); margin-top: 8px; min-height: 18px; }
+
+/* ── Resumen ── */
+.res { max-width: 1120px; margin: 0 auto; padding: 28px 20px 60px; }
+.res-cab { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  padding-bottom: 18px; border-bottom: 1px solid var(--gris-bd); }
+.res-cab h1 { font-family: var(--font-titulos); font-weight: 600; color: var(--azul); font-size: clamp(26px, 3.2vw, 38px); line-height: 1.1; margin-top: 6px; }
+.res-cab .bajada { margin-top: 2px; }
+.res-meta { display: flex; gap: 26px; flex-wrap: wrap; }
+.res-meta div { text-align: right; }
+.res-meta b { display: block; font-family: var(--font-titulos); font-weight: 700; font-size: 32px; line-height: 1; color: var(--azul); }
+.res-acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.bloque { padding: 26px 0 6px; break-inside: avoid; }
+.bloque > h2 { font-family: var(--font-titulos); font-weight: 600; color: var(--azul); font-size: 24px; margin: 4px 0 14px; }
+.res-pie { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 22px;
+  margin-top: 22px; border-top: 1px solid var(--gris-bd); }
+
+@media (max-width: 960px) {
+  .graf-grid, .b-grid { grid-template-columns: 1fr; }
+  .espera { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 28px; padding: 20px 0; }
+}
+@media (max-width: 720px) {
+  .topbar { padding: 10px 14px; }
+  .topbar-title { font-size: 18px; }
+  .escena-cuerpo { padding: 16px 12px 14px; }
+  .consola-int { padding: 0 12px 14px; }
+  .tarjeta { padding: 16px 14px; }
+  .cab-der .qr-chico { display: none; }
+}
+@media print {
+  body { background: #fff; }
+  .no-print, .toasts { display: none !important; }
+  .res { padding: 0; max-width: 100%; }
+  .tarjeta { box-shadow: none; border: 1px solid var(--gris-bd); break-inside: avoid; }
+  .matriz td, .relleno, .pista { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   1. CONFIGURACIÓN — mismo proyecto Supabase que la presentación anterior
+   ═══════════════════════════════════════════════════════════════ */
+
+const SUPABASE_URL = "https://tofbrbtyokqczjjrdzoo.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZmJyYnR5b2txY3pqanJkem9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwNTMzNDMsImV4cCI6MjEwMjYyOTM0M30.GCzE8q7EV4Rz9TjmaB5zs8DpRObVRsWEnr4PK2zdfiU";
+// La clave del presentador NO va acá: se tipea al entrar a #presenta
+// y tiene que coincidir con la que está en supabase.sql
+
+// MODO LOCAL: abierto desde el disco (file://) o desde localhost, todo se guarda
+// en el localStorage del navegador y no se toca Supabase. Las pestañas del mismo
+// navegador comparten los datos y cada pestaña cuenta como un participante distinto.
+// Forzar: ?local para usarlo en cualquier lado, ?supabase para probar Supabase en local.
+const PARAMS = new URLSearchParams(location.search);
+const MODO_LOCAL = !PARAMS.has("supabase") && (PARAMS.has("local") ||
+  location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname));
+const CLAVE_LOCAL = "evento3600511";   // solo vale en modo local
+
+const EVENTO = "Negocios 360";
+const EVENTO_SUB = "Economía del Conocimiento · La Pampa";
+const EVENTO_COMPLETO = "Negocios 360 – Economía del Conocimiento – La Pampa";
+
+/* ═══════════════════════════════════════════════════════════════
+   2. MOMENTOS Y PREGUNTAS
+   El presentador habilita un momento a la vez; el participante
+   responde todas sus preguntas en una sola pantalla.
+   ═══════════════════════════════════════════════════════════════ */
+
+const MOMENTOS = [
+  {
+    id: "A",
+    titulo: "¿Quiénes participan?",
+    bajada: "Composición de la audiencia y sus intereses",
+    preguntas: [
+      {
+        id: "A1", tipo: "unica",
+        texto: "¿Desde qué tipo de organización participás?",
+        opciones: [
+          { id: "conocimiento", texto: "Empresa basada en el conocimiento (servicios tecnológicos, software, otras)" },
+          { id: "otro_sector",  texto: "Empresa de otro sector productivo" },
+          { id: "startup",      texto: "Emprendimiento o startup" },
+          { id: "cyt",          texto: "Institución científica, académica o tecnológica" },
+          { id: "publico",      texto: "Organismo público u otra organización" }
+        ]
+      },
+      {
+        id: "A2", tipo: "unica",
+        texto: "¿Qué te interesa encontrar en La Pampa?",
+        opciones: [
+          { id: "clientes",   texto: "Clientes u oportunidades comerciales" },
+          { id: "talento",    texto: "Talento o capacidades tecnológicas" },
+          { id: "alianzas",   texto: "Alianzas o proyectos conjuntos" },
+          { id: "inversion",  texto: "Oportunidades de inversión o radicación" },
+          { id: "ecosistema", texto: "Conocer el ecosistema y sus herramientas" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "B",
+    titulo: "Mapa de oportunidades",
+    bajada: "Sectores donde quieren trabajar × capacidades que pueden aportar",
+    preguntas: [
+      {
+        id: "B1", tipo: "multiple", max: 3,
+        texto: "¿En qué sectores productivos te interesa desarrollar soluciones o negocios?",
+        opciones: [
+          { id: "agroind", texto: "Agroindustria y alimentos",                 corto: "Agroindustria y alimentos" },
+          { id: "manuf",   texto: "Industria manufacturera",                   corto: "Industria manufacturera" },
+          { id: "agro",    texto: "Agricultura y ganadería",                   corto: "Agricultura y ganadería" },
+          { id: "energia", texto: "Energía, hidrocarburos y minería",          corto: "Energía y minería" },
+          { id: "agua",    texto: "Agua y ambiente",                           corto: "Agua y ambiente" },
+          { id: "salud",   texto: "Salud",                                     corto: "Salud" },
+          { id: "edu",     texto: "Educación, turismo e industrias culturales", corto: "Educación, turismo y cultura" },
+          { id: "otros",   texto: "Otros",                                     corto: "Otros" }
+        ]
+      },
+      {
+        id: "B2", tipo: "multiple", max: 2,
+        texto: "¿Qué capacidades o tecnologías podés aportar?",
+        opciones: [
+          { id: "soft",    texto: "Software, datos e inteligencia artificial",  corto: "Software, datos e IA" },
+          { id: "iot",     texto: "Automatización, IoT y sensores",             corto: "Automatización e IoT" },
+          { id: "ing",     texto: "Ingeniería y desarrollo de productos",       corto: "Ingeniería y productos" },
+          { id: "bio",     texto: "Biotecnología y servicios científicos",      corto: "Biotecnología" },
+          { id: "ciber",   texto: "Ciberseguridad e infraestructura digital",   corto: "Ciberseguridad" },
+          { id: "diseno",  texto: "Diseño, contenidos y servicios digitales",   corto: "Diseño y contenidos" }
+        ]
+      }
+    ]
+  }
+];
+
+MOMENTOS.forEach(m => m.preguntas.forEach(q => { q.momento = m.id; }));
+const PREGUNTAS = MOMENTOS.flatMap(m => m.preguntas);
+
+/* ═══════════════════════════════════════════════════════════════
+   3. Acceso a datos
+   ═══════════════════════════════════════════════════════════════ */
+
+const API = SUPABASE_URL + "/rest/v1";
+const H = {
+  apikey: SUPABASE_ANON,
+  Authorization: "Bearer " + SUPABASE_ANON,
+  "Content-Type": "application/json"
+};
+
+const nuevoCodigo = () => "S" + new Date().toISOString().slice(2, 16).replace(/[-:T]/g, "");
+
+// Base local: imita las tablas sesion (fila id=1) y respuestas
+function baseLocal() {
+  let db = null;
+  try { db = JSON.parse(localStorage.getItem("n360_local")); } catch {}
+  if (!db || !db.sesion) {
+    db = { sesion: { id: 1, pregunta_activa: null, abierta: false, codigo: nuevoCodigo() }, respuestas: [], ultimoId: 0 };
+    guardarBaseLocal(db);
+  }
+  return db;
+}
+function guardarBaseLocal(db) {
+  try { localStorage.setItem("n360_local", JSON.stringify(db)); return true; } catch { return false; }
+}
+
+async function leerEstado() {
+  if (MODO_LOCAL) return { ...baseLocal().sesion };
+  try {
+    const r = await fetch(API + "/sesion?id=eq.1&select=*", { headers: H });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d[0] || null;
+  } catch { return null; }
+}
+
+async function escribirEstado(clave, pregunta, abierta, codigo) {
+  if (MODO_LOCAL) {
+    if (clave !== CLAVE_LOCAL) return false;
+    const db = baseLocal();
+    db.sesion.pregunta_activa = pregunta || null;
+    db.sesion.abierta = !!abierta;
+    if (codigo) db.sesion.codigo = codigo;
+    return guardarBaseLocal(db);
+  }
+  try {
+    const r = await fetch(SUPABASE_URL + "/rest/v1/rpc/set_estado", {
+      method: "POST", headers: H,
+      body: JSON.stringify({
+        p_clave: clave, p_pregunta: pregunta || null,
+        p_abierta: !!abierta, p_codigo: codigo || null
+      })
+    });
+    return r.ok;
+  } catch { return false; }
+}
+
+async function enviarFilas(filas) {
+  if (MODO_LOCAL) {
+    // mismo comportamiento que el upsert sobre (sesion, pregunta, item, participante)
+    const db = baseLocal();
+    filas.forEach(f => {
+      const previa = db.respuestas.find(r => r.sesion === f.sesion && r.pregunta === f.pregunta &&
+        r.item === f.item && r.participante === f.participante);
+      if (previa) previa.valor = f.valor;
+      else db.respuestas.push({ id: ++db.ultimoId, ...f, creado: new Date().toISOString() });
+    });
+    return guardarBaseLocal(db);
+  }
+  try {
+    const r = await fetch(
+      API + "/respuestas?on_conflict=sesion,pregunta,item,participante",
+      { method: "POST", headers: { ...H, Prefer: "resolution=merge-duplicates" },
+        body: JSON.stringify(filas) }
+    );
+    return r.ok;
+  } catch { return false; }
+}
+
+async function traerNuevas(sesion, desdeId) {
+  if (MODO_LOCAL) return baseLocal().respuestas.filter(r => r.sesion === sesion && r.id > desdeId);
+  try {
+    const url = API + "/respuestas?sesion=eq." + encodeURIComponent(sesion) +
+      "&id=gt." + desdeId + "&select=*&order=id.asc&limit=3000";
+    const r = await fetch(url, { headers: H });
+    if (!r.ok) return [];
+    return await r.json();
+  } catch { return []; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   4. Utilidades
+   ═══════════════════════════════════════════════════════════════ */
+
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g,
+  c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const momentoPorId = id => MOMENTOS.find(m => m.id === id) || null;
+const preguntaPorId = id => PREGUNTAS.find(q => q.id === id) || null;
+const opcionDe = (q, id) => (q && q.opciones.find(o => o.id === id)) || null;
+const momentoDe = qid => { const q = preguntaPorId(qid); return q ? q.momento : null; };
+
+// identidad y envíos del participante: en modo local, por pestaña
+const almacen = () => MODO_LOCAL ? sessionStorage : localStorage;
+function leerLS(k) { try { return almacen().getItem(k); } catch { return null; } }
+function grabarLS(k, v) { try { almacen().setItem(k, v); } catch {} }
+
+function idParticipante() {
+  let v = leerLS("n360_pid");
+  if (!v) {
+    v = Math.random().toString(36).slice(2, 11) + Date.now().toString(36).slice(-4);
+    grabarLS("n360_pid", v);
+  }
+  return v;
+}
+const PID = idParticipante();
+
+function toast(msg, tipo) {
+  const t = document.createElement("div");
+  t.className = "toast toast-" + (tipo || "neutral");
+  t.textContent = msg;
+  $("#toasts").appendChild(t);
+  setTimeout(() => t.remove(), 4200);
+}
+
+function cabecera(derecha) {
+  const der = (MODO_LOCAL ? '<span class="topbar-badge local">Modo local · sin Supabase</span>' : "") + (derecha || "");
+  return `<header class="topbar">
+    <div><div class="topbar-title">${esc(EVENTO)}</div><div class="topbar-sub">${esc(EVENTO_SUB)}</div></div>
+    ${der ? `<div class="topbar-right">${der}</div>` : ""}</header>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5. Agregados (sirven igual para datos en vivo y para un .json importado)
+   ═══════════════════════════════════════════════════════════════ */
+
+// Una entrada por participante: { id, A1, A2, B1:[], B2:[], fecha }
+function porPersona(f) {
+  const m = new Map();
+  f.forEach(r => {
+    const q = preguntaPorId(r.pregunta);
+    if (!q) return;
+    let p = m.get(r.participante);
+    if (!p) { p = { id: r.participante, fecha: r.creado || null }; m.set(r.participante, p); }
+    if (q.tipo === "unica") p[q.id] = r.valor;
+    else {
+      p[q.id] = p[q.id] || [];
+      if (!p[q.id].includes(r.valor)) p[q.id].push(r.valor);
+    }
+    if (r.creado && (!p.fecha || r.creado < p.fecha)) p.fecha = r.creado;
+  });
+  return [...m.values()];
+}
+
+// Personas distintas por opción, y total de personas que respondieron la pregunta
+function conteo(q, f) {
+  const g = f.filter(r => r.pregunta === q.id);
+  const total = new Set(g.map(r => r.participante)).size;
+  const por = {};
+  q.opciones.forEach(o => { por[o.id] = new Set(); });
+  g.forEach(r => { if (por[r.valor]) por[r.valor].add(r.participante); });
+  return { total, items: q.opciones.map(o => ({ o, n: por[o.id].size })) };
+}
+
+// Matriz B1 × B2 calculada persona por persona: cada celda es la cantidad
+// de participantes que eligieron ese sector Y esa capacidad.
+function matriz(f) {
+  const qs = preguntaPorId("B1"), qc = preguntaPorId("B2");
+  const M = {};
+  qs.opciones.forEach(s => { M[s.id] = {}; qc.opciones.forEach(c => { M[s.id][c.id] = 0; }); });
+  let personas = 0;
+  porPersona(f).forEach(p => {
+    if (!p.B1 || !p.B2 || !p.B1.length || !p.B2.length) return;
+    personas++;
+    p.B1.forEach(s => p.B2.forEach(c => { if (M[s] && c in M[s]) M[s][c]++; }));
+  });
+  const pares = [];
+  qs.opciones.forEach(s => qc.opciones.forEach(c => {
+    const n = M[s.id][c.id];
+    if (n) pares.push({ s, c, n });
+  }));
+  pares.sort((a, b) => b.n - a.n);
+  return { qs, qc, M, personas, pares, max: pares.length ? pares[0].n : 0 };
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. Piezas visuales
+   ═══════════════════════════════════════════════════════════════ */
+
+// pct: muestra % sobre quienes respondieron (selección única)
+// ordenar: ranking de mayor a menor, solo conteo
+function barrasHTML(q, f, opts) {
+  const { total, items } = conteo(q, f);
+  const lista = opts.ordenar ? items.slice().sort((a, b) => b.n - a.n) : items;
+  const tope = Math.max(1, ...items.map(i => i.n));
+  return lista.map(({ o, n }) => {
+    const ancho = opts.pct ? (total ? n / total * 100 : 0) : n / tope * 100;
+    const num = opts.pct
+      ? `<b>${total ? Math.round(n / total * 100) : 0}%</b> · ${n}`
+      : `<b>${n}</b> ${n === 1 ? "persona" : "personas"}`;
+    return `<div class="fila-barra">
+      <div class="fila-cab"><span class="fila-txt">${esc(o.texto)}</span><span class="fila-num">${num}</span></div>
+      <div class="pista"><div class="relleno ${n === tope && n ? "lider" : ""}" style="width:${ancho}%"></div></div>
+    </div>`;
+  }).join("");
+}
+
+// escala secuencial de un solo tono: celeste claro → celeste → azul institucional
+function colorCalor(k) {
+  const A = [203, 232, 246], B = [0, 150, 199], C = [26, 58, 107];
+  const mezcla = (x, y, t) => x.map((v, i) => Math.round(v + (y[i] - v) * t));
+  const rgb = k < .5 ? mezcla(A, B, k / .5) : mezcla(B, C, (k - .5) / .5);
+  return "rgb(" + rgb.join(",") + ")";
+}
+
+function matrizHTML(mx) {
+  if (!mx.personas) return '<p class="vacio pulso">Esperando respuestas para cruzar sectores y capacidades…</p>';
+  const cab = mx.qc.opciones.map(c => `<th scope="col">${esc(c.corto)}</th>`).join("");
+  const cuerpo = mx.qs.opciones.map(s => `<tr><th scope="row">${esc(s.corto)}</th>${
+    mx.qc.opciones.map(c => {
+      const n = mx.M[s.id][c.id];
+      const tit = esc(s.texto + " × " + c.texto + ": " + n + (n === 1 ? " persona" : " personas"));
+      if (!n) return `<td class="cero" title="${tit}">·</td>`;
+      const k = .12 + .88 * n / mx.max;
+      return `<td title="${tit}" style="background:${colorCalor(k)};color:${k >= .45 ? "#fff" : "var(--azul)"}">${n}</td>`;
+    }).join("")}</tr>`).join("");
+  return `<div class="matriz-wrap"><table class="matriz">
+      <thead><tr><th class="esquina">Sectores ↓<br>Capacidades →</th>${cab}</tr></thead>
+      <tbody>${cuerpo}</tbody></table></div>
+    <div class="leyenda-escala"><span>menos</span><i></i><span>más personas</span>
+      <span>· ${mx.personas} ${mx.personas === 1 ? "persona" : "personas"} con sector y capacidad</span></div>`;
+}
+
+function conexionesHTML(mx, cuantas) {
+  if (!mx.pares.length) return '<p class="vacio">Sin conexiones todavía.</p>';
+  return mx.pares.slice(0, cuantas).map((p, i) => `
+    <div class="conexion"><span class="pos">${i + 1}</span>
+      <div class="par"><b>${esc(p.s.corto)}</b><span>↔ ${esc(p.c.corto)}</span></div>
+      <span class="n" title="${p.n} ${p.n === 1 ? "persona" : "personas"}">${p.n}</span></div>`).join("");
+}
+
+function tarjetasA(f) {
+  return `<div class="graf-grid">${momentoPorId("A").preguntas.map(q =>
+    `<section class="tarjeta"><h3>${esc(q.texto)}</h3>${barrasHTML(q, f, { pct: true })}</section>`).join("")}</div>`;
+}
+
+function rankingB(f) {
+  return `<div class="graf-grid">${momentoPorId("B").preguntas.map(q =>
+    `<section class="tarjeta"><h3>${q.id === "B1" ? "Ranking de sectores" : "Ranking de capacidades"}</h3>
+      ${barrasHTML(q, f, { ordenar: true })}</section>`).join("")}</div>`;
+}
+
+function matrizB(f, cuantas) {
+  const mx = matriz(f);
+  return `<div class="b-grid">
+    <section class="tarjeta"><h3>¿Dónde se cruzan sectores y capacidades?</h3>${matrizHTML(mx)}</section>
+    <aside class="tarjeta"><h3>Conexiones más fuertes</h3>${conexionesHTML(mx, cuantas)}</aside></div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7. Vista del participante
+   ═══════════════════════════════════════════════════════════════ */
+
+const app = $("#app");
+let estado = null, cargando = true, borrador = {}, focoOpcion = null;
+let enviadas = {};
+try { enviadas = JSON.parse(leerLS("n360_env") || "{}") || {}; } catch { enviadas = {}; }
+const claveEnvio = m => estado.codigo + ":" + m.id;
+
+function pintarParticipante() {
+  if (cargando) {
+    app.innerHTML = cabecera() + '<div class="centrado"><span class="pulso" style="color:var(--gris-txt)">conectando…</span></div>';
+    return;
+  }
+  const m = estado && estado.abierta ? momentoPorId(estado.pregunta_activa) : null;
+
+  if (!m) {
+    app.innerHTML = cabecera() + `<div class="centrado">
+      <div class="puntos"><span class="pulso"></span><span class="pulso" style="animation-delay:.3s"></span><span class="pulso" style="animation-delay:.6s"></span></div>
+      <h2>Ya estás dentro</h2>
+      <p>Dejá esta pantalla abierta. Las preguntas van a aparecer acá cuando el presentador las habilite.</p></div>`;
+    return;
+  }
+
+  if (enviadas[claveEnvio(m)]) {
+    app.innerHTML = cabecera() + `<div class="centrado">
+      <div class="ok-icono">✓</div>
+      <h2>Respuesta registrada</h2>
+      <p>Mirá la pantalla grande. Cuando se habilite el próximo momento, esta vista se actualiza sola.</p></div>`;
+    return;
+  }
+
+  const b = borrador[m.id] || (borrador[m.id] = {});
+  const n = MOMENTOS.indexOf(m) + 1;
+
+  const cuerpo = m.preguntas.map(q => {
+    const multiple = q.tipo === "multiple";
+    const sel = multiple ? (b[q.id] || []) : b[q.id];
+    const lleno = multiple && sel.length >= q.max;
+    return `<section class="preg">
+      <h2>${esc(q.texto)}</h2>
+      <div class="preg-ayuda"><span>${multiple ? "Elegí hasta " + q.max : "Elegí una opción"}</span>
+        ${multiple ? `<span class="${lleno ? "lleno" : ""}">${sel.length} de ${q.max}</span>` : ""}</div>
+      <div role="group" aria-label="${esc(q.texto)}">${q.opciones.map(o => {
+        const on = multiple ? sel.includes(o.id) : sel === o.id;
+        return `<button type="button" class="opcion" data-q="${q.id}" data-op="${o.id}" aria-pressed="${on}"
+          ${!on && lleno ? "disabled" : ""}><span class="marca ${multiple ? "cuadrada" : ""}"></span><span>${esc(o.texto)}</span></button>`;
+      }).join("")}</div></section>`;
+  }).join("");
+
+  const listo = m.preguntas.every(q => q.tipo === "multiple" ? (b[q.id] || []).length : b[q.id]);
+
+  app.innerHTML = cabecera() + `<main class="envoltorio">
+    <div class="etiqueta">Momento ${m.id} · ${n} de ${MOMENTOS.length}</div>
+    <h1 class="part-titulo">${esc(m.titulo)}</h1>
+    ${cuerpo}
+    <div class="barra-fija">
+      <button class="btn-primary btn-grande btn-ancho" id="enviar" ${listo ? "" : "disabled"}>Enviar respuestas</button>
+      <div id="aviso"></div></div></main>`;
+
+  app.querySelectorAll(".opcion").forEach(el => el.onclick = () => {
+    const q = preguntaPorId(el.dataset.q), id = el.dataset.op;
+    if (q.tipo === "multiple") {
+      const s = b[q.id] || (b[q.id] = []);
+      const i = s.indexOf(id);
+      if (i >= 0) s.splice(i, 1); else if (s.length < q.max) s.push(id);
+    } else b[q.id] = id;
+    focoOpcion = [q.id, id];
+    pintarParticipante();
+  });
+
+  // tras repintar, el foco vuelve a la opción tocada (navegación con teclado)
+  if (focoOpcion) {
+    const el = app.querySelector(`.opcion[data-q="${focoOpcion[0]}"][data-op="${focoOpcion[1]}"]`);
+    if (el && !el.disabled) el.focus({ preventScroll: true });
+    focoOpcion = null;
+  }
+
+  $("#enviar").onclick = () => mandar(m);
+}
+
+async function mandar(m) {
+  const btn = $("#enviar");
+  btn.disabled = true; btn.textContent = "Enviando…";
+  const b = borrador[m.id] || {};
+  const filas = [];
+  m.preguntas.forEach(q => {
+    if (q.tipo === "multiple") (b[q.id] || []).forEach(id => filas.push(
+      { sesion: estado.codigo, pregunta: q.id, item: id, valor: id, participante: PID }));
+    else if (b[q.id]) filas.push(
+      { sesion: estado.codigo, pregunta: q.id, item: "", valor: b[q.id], participante: PID });
+  });
+  const ok = await enviarFilas(filas);
+  if (ok) {
+    enviadas[claveEnvio(m)] = true;
+    grabarLS("n360_env", JSON.stringify(enviadas));
+    delete borrador[m.id];
+    pintarParticipante();
+  } else {
+    btn.disabled = false; btn.textContent = "Reintentar";
+    const a = $("#aviso");
+    if (a) a.innerHTML = '<div class="aviso">No se pudo guardar. Revisá la conexión y tocá Reintentar.</div>';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   8. Vista del presentador
+   ═══════════════════════════════════════════════════════════════ */
+
+let clave = "", filas = [], ultimoId = 0;
+let consolaAbierta = true, mostrar = true, vistaB = "matriz", verQR = false;
+
+const urlPublica = () => location.href.split("#")[0];
+
+function ponerQR(id, lado) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (typeof QRCode === "undefined") {
+    (el.closest(".qr-caja") || el).classList.add("oculto");
+    return;
+  }
+  el.innerHTML = "";
+  new QRCode(el, { text: urlPublica(), width: lado, height: lado,
+    colorDark: "#1a3a6b", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+}
+
+const personasEn = (mid, f) => new Set(f.filter(r => momentoDe(r.pregunta) === mid).map(r => r.participante)).size;
+
+function pintarPresentador() {
+  if (!estado) {
+    app.innerHTML = cabecera() + '<div class="centrado"><span class="pulso" style="color:var(--gris-txt)">conectando…</span></div>';
+    return;
+  }
+  const activo = momentoPorId(estado.pregunta_activa);
+  const m = verQR ? null : activo;
+
+  const derecha = (m ? (estado.abierta
+      ? '<span class="topbar-badge vivo">● Recibiendo respuestas</span>'
+      : '<span class="topbar-badge">○ Votación cerrada</span>') : "") +
+    `<span class="topbar-badge">Sesión ${esc(estado.codigo)}</span>`;
+
+  let cuerpo;
+  if (!m) {
+    cuerpo = `<div class="espera">
+      <div class="qr-caja"><div id="qrGrande" class="qr"></div></div>
+      <div>
+        <div class="etiqueta">Participación en vivo</div>
+        <h1 class="titulo-grande">Sumate desde tu celular</h1>
+        <p class="espera-txt">Escaneá el código o entrá a</p>
+        <div class="url-txt">${esc(urlPublica())}</div>
+        <p class="espera-nota">Dejá la página abierta: las preguntas aparecen solas cuando se habilitan.
+          Las respuestas son anónimas.</p>
+      </div></div>`;
+  } else {
+    let resultados;
+    if (!mostrar) {
+      resultados = `<div class="tapado"><h3>Resultados ocultos</h3>
+        <p>Las respuestas se siguen recibiendo. Se muestran cuando el presentador las habilite.</p></div>`;
+    } else if (m.id === "A") {
+      resultados = tarjetasA(filas);
+    } else {
+      resultados = vistaB === "matriz" ? matrizB(filas, 5) : rankingB(filas);
+    }
+    const personas = personasEn(m.id, filas);
+    cuerpo = `<div class="escena-cab">
+        <div>
+          <div class="etiqueta">Momento ${m.id}</div>
+          <h1 class="titulo-grande">${esc(m.titulo)}</h1>
+          <div class="bajada">${esc(m.bajada)}</div>
+          ${m.id === "B" && mostrar ? `<div class="vista-ctl" role="group" aria-label="Vista">
+            <button data-v="matriz" class="${vistaB === "matriz" ? "activo" : ""}">Matriz</button>
+            <button data-v="ranking" class="${vistaB === "ranking" ? "activo" : ""}">Ranking</button></div>` : ""}
+        </div>
+        <div class="cab-der">
+          <div class="contador-grande"><b>${personas}</b><span class="etiqueta">${personas === 1 ? "persona respondió" : "personas respondieron"}</span></div>
+          ${estado.abierta ? '<div class="qr qr-chico" id="qrChico" title="Sumate desde tu celular"></div>' : ""}
+        </div></div>
+      ${resultados}`;
+  }
+
+  const enInicio = !m;
+  app.innerHTML = `<div class="escena">
+    ${cabecera(derecha)}
+    <div class="escena-cuerpo">${cuerpo}</div>
+    <div class="consola no-print">
+      <button id="toggle" class="consola-toggle etiqueta">${consolaAbierta ? "▾ ocultar consola" : "▴ mostrar consola"}</button>
+      <div class="consola-int ${consolaAbierta ? "" : "oculto"}">
+        <div class="tabs-consola">
+          <button class="tab-m ${enInicio ? "activa" : ""}" id="tabQR">Pantalla QR</button>
+          ${MOMENTOS.map(x => {
+            const n = personasEn(x.id, filas);
+            return `<button class="tab-m ${!enInicio && x.id === estado.pregunta_activa ? "activa" : ""}" data-m="${x.id}">
+              ${x.id} · ${esc(x.titulo)}${n ? `<span class="cnt">${n}</span>` : ""}</button>`;
+          }).join("")}
+        </div>
+        <div class="acciones">
+          <button class="${estado.abierta ? "btn-outline" : "btn-primary"}" id="toggleVoto" ${activo ? "" : "disabled"}>
+            ${estado.abierta ? "Cerrar votación" : "Abrir votación"}</button>
+          <button class="btn-outline" id="verRes">${mostrar ? "Ocultar resultados" : "Mostrar resultados"}</button>
+          <button class="btn-outline" id="json" ${filas.length ? "" : "disabled"}>Descargar JSON (${new Set(filas.map(r => r.participante)).size})</button>
+          <button class="btn-outline" id="csv" ${filas.length ? "" : "disabled"}>Descargar CSV</button>
+          <button class="btn-outline" id="resumen">Resumen</button>
+          <div style="flex:1"></div>
+          <button class="btn-danger" id="nueva">Nueva sesión</button>
+        </div>
+        <div class="atajos">Atajos: <kbd>O</kbd> ocultar/mostrar resultados · <kbd>M</kbd> matriz/ranking · <kbd>Q</kbd> pantalla QR</div>
+      </div></div></div>`;
+
+  ponerQR("qrGrande", 280);
+  ponerQR("qrChico", 84);
+
+  $("#toggle").onclick = () => { consolaAbierta = !consolaAbierta; pintarPresentador(); };
+  $("#tabQR").onclick = () => { verQR = true; pintarPresentador(); };
+  app.querySelectorAll(".tab-m[data-m]").forEach(b => b.onclick = async () => {
+    verQR = false;
+    if (b.dataset.m !== estado.pregunta_activa || !estado.abierta) {
+      const ok = await escribirEstado(clave, b.dataset.m, true, null);
+      if (!ok) toast("No se pudo habilitar el momento. Revisá la conexión.", "error");
+      estado = (await leerEstado()) || estado;
+    }
+    pintarPresentador();
+  });
+  app.querySelectorAll(".vista-ctl button").forEach(b => b.onclick = () => { vistaB = b.dataset.v; pintarPresentador(); });
+  $("#toggleVoto").onclick = async () => {
+    const ok = await escribirEstado(clave, estado.pregunta_activa, !estado.abierta, null);
+    if (!ok) toast("No se pudo cambiar el estado de la votación.", "error");
+    estado = (await leerEstado()) || estado;
+    pintarPresentador();
+  };
+  $("#verRes").onclick = () => { mostrar = !mostrar; pintarPresentador(); };
+  $("#json").onclick = descargarJSON;
+  $("#csv").onclick = descargarCSV;
+  $("#resumen").onclick = () => window.open(location.pathname + "#resumen", "_blank");
+  $("#nueva").onclick = async () => {
+    if (!confirm("Se inicia una sesión nueva y la pantalla queda en blanco.\n\n¿Ya descargaste el JSON de esta sesión?")) return;
+    const ok = await escribirEstado(clave, null, false, nuevoCodigo());
+    if (!ok) { toast("No se pudo crear la sesión.", "error"); return; }
+    filas = []; ultimoId = 0; verQR = false;
+    estado = (await leerEstado()) || estado;
+    pintarPresentador();
+    toast("Sesión " + estado.codigo + " creada.", "success");
+  };
+}
+
+function pedirClave() {
+  app.innerHTML = cabecera() + `<div class="centrado"><div class="clave-caja">
+    <div class="etiqueta">Acceso del presentador</div>
+    <input type="password" id="clave" placeholder="Clave" autocomplete="current-password">
+    <div class="clave-err" id="err"></div>
+    <button class="btn-primary btn-grande btn-ancho" id="entrar" style="margin-top:6px">Entrar</button>
+  </div></div>`;
+  const probar = async () => {
+    const v = $("#clave").value;
+    if (!v) return;
+    $("#entrar").disabled = true;
+    const est = await leerEstado();
+    const ok = est && await escribirEstado(v, est.pregunta_activa, est.abierta, null);
+    $("#entrar").disabled = false;
+    if (!ok) { $("#err").textContent = "Clave incorrecta o sin conexión."; return; }
+    clave = v; estado = est;
+    pintarPresentador(); cicloPresentador();
+  };
+  $("#entrar").onclick = probar;
+  $("#clave").onkeydown = e => { if (e.key === "Enter") probar(); };
+  $("#clave").focus();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. Exportación (JSON por sesión + CSV)
+   ═══════════════════════════════════════════════════════════════ */
+
+let importado = null;   // { sesion, exportado } cuando el resumen viene de un archivo
+const sesionActual = () => importado ? importado.sesion : (estado ? estado.codigo : "sesion");
+
+function descargar(nombre, contenido, tipo) {
+  const blob = new Blob([contenido], { type: tipo });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = nombre;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+function armarJSON(codigo, rows) {
+  return {
+    evento: EVENTO_COMPLETO,
+    sesion: codigo,
+    exportado: new Date().toISOString(),
+    momentos: MOMENTOS.map(m => ({
+      id: m.id, titulo: m.titulo,
+      preguntas: m.preguntas.map(q => ({
+        id: q.id, tipo: q.tipo, max: q.max || 1, texto: q.texto,
+        opciones: q.opciones.map(o => ({ id: o.id, texto: o.texto }))
+      }))
+    })),
+    participantes: porPersona(rows).map(p => ({
+      id: p.id, A1: p.A1 || null, A2: p.A2 || null,
+      B1: p.B1 || [], B2: p.B2 || [], fecha: p.fecha
+    })),
+    respuestas: rows
+  };
+}
+
+function descargarJSON() {
+  const cod = sesionActual();
+  descargar("negocios360-" + cod + ".json", JSON.stringify(armarJSON(cod, filas), null, 2), "application/json");
+}
+
+function descargarCSV() {
+  const c = s => '"' + String(s == null ? "" : s).replace(/"/g, '""') + '"';
+  const out = [["sesion","momento","pregunta_id","pregunta","opcion_id","opcion","participante","fecha_hora"].join(";")];
+  filas.forEach(r => {
+    const q = preguntaPorId(r.pregunta);
+    const o = opcionDe(q, r.valor);
+    out.push([c(r.sesion), c(q ? q.momento : ""), c(r.pregunta), c(q ? q.texto : ""),
+      c(r.valor), c(o ? o.texto : ""), c(r.participante),
+      c(r.creado ? new Date(r.creado).toISOString() : "")].join(";"));
+  });
+  descargar("negocios360-" + sesionActual() + ".csv", "﻿" + out.join("\n"), "text/csv;charset=utf-8");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. Página de resumen (en vivo o desde un .json guardado)
+   ═══════════════════════════════════════════════════════════════ */
+
+function pintarResumen() {
+  const codigo = importado ? importado.sesion : (estado ? estado.codigo : null);
+  const personas = new Set(filas.map(r => r.participante)).size;
+  const nA = personasEn("A", filas), nB = personasEn("B", filas);
+  const fecha = new Date(importado && importado.exportado ? importado.exportado : Date.now())
+    .toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" });
+
+  const origen = importado ? "archivo .json" : (estado ? "en vivo" : "sin conexión");
+  app.innerHTML = `<div class="res">
+    <div class="res-cab">
+      <div>
+        <div class="etiqueta">Síntesis de la consulta · ${codigo ? "sesión " + esc(codigo) + " · " : ""}${origen}</div>
+        <h1>${esc(EVENTO)} – Economía del Conocimiento</h1>
+        <div class="bajada">La Pampa</div>
+      </div>
+      <div class="res-meta">
+        <div><b>${personas}</b><span class="etiqueta">participantes</span></div>
+        <div><b>${nA}</b><span class="etiqueta">momento A</span></div>
+        <div><b>${nB}</b><span class="etiqueta">momento B</span></div>
+      </div>
+    </div>
+    <div class="res-acciones no-print">
+      <button class="btn-outline" id="abrir">Abrir archivo .json</button>
+      <input type="file" id="archivo" accept=".json,application/json" class="oculto">
+      <button class="btn-outline" id="json" ${filas.length ? "" : "disabled"}>Descargar JSON</button>
+      <button class="btn-outline" id="csv" ${filas.length ? "" : "disabled"}>Descargar CSV</button>
+      <button class="btn-primary" id="imprimir">Imprimir o guardar en PDF</button>
+    </div>
+    ${!codigo && !importado ? '<p class="vacio">No se pudo conectar con la sesión en vivo. Podés abrir un archivo .json guardado.</p>' : ""}
+    <section class="bloque">
+      <div class="etiqueta">Momento A · ${nA} ${nA === 1 ? "respuesta" : "respuestas"}</div>
+      <h2>¿Quiénes participan?</h2>
+      ${tarjetasA(filas)}
+    </section>
+    <section class="bloque">
+      <div class="etiqueta">Momento B · ${nB} ${nB === 1 ? "respuesta" : "respuestas"}</div>
+      <h2>Mapa de oportunidades</h2>
+      ${rankingB(filas)}
+      <div style="height:18px"></div>
+      ${matrizB(filas, 10)}
+    </section>
+    <div class="res-pie"><span class="etiqueta">${esc(fecha)} · Gobierno de La Pampa</span></div>
+  </div>`;
+
+  $("#abrir").onclick = () => $("#archivo").click();
+  $("#archivo").onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const lector = new FileReader();
+    lector.onload = () => {
+      try {
+        const d = JSON.parse(lector.result);
+        if (!d || !Array.isArray(d.respuestas)) throw new Error("formato");
+        importado = { sesion: d.sesion || file.name.replace(/\.json$/i, ""), exportado: d.exportado || null };
+        filas = d.respuestas;
+        pintarResumen();
+        toast("Sesión " + importado.sesion + " cargada desde el archivo.", "success");
+      } catch {
+        toast("El archivo no es un JSON de sesión válido.", "error");
+      }
+    };
+    lector.readAsText(file);
+  };
+  $("#json").onclick = descargarJSON;
+  $("#csv").onclick = descargarCSV;
+  $("#imprimir").onclick = () => window.print();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. Ciclos y arranque
+   ═══════════════════════════════════════════════════════════════ */
+
+async function cicloResumen() {
+  pintarResumen();
+  estado = await leerEstado();
+  const tick = async () => {
+    if (importado) return;   // con un archivo cargado no se consulta Supabase
+    if (!estado) { estado = await leerEstado(); if (!estado) return; }
+    const nuevas = await traerNuevas(estado.codigo, ultimoId);
+    if (importado) return;   // se cargó un archivo mientras llegaba la respuesta
+    if (nuevas.length) {
+      ultimoId = nuevas[nuevas.length - 1].id;
+      filas = filas.concat(nuevas);
+    }
+    pintarResumen();
+  };
+  await tick();
+  pintarResumen();
+  setInterval(tick, 8000);
+}
+
+async function cicloPresentador() {
+  let temporizador;
+  addEventListener("resize", () => {
+    clearTimeout(temporizador);
+    temporizador = setTimeout(pintarPresentador, 180);
+  });
+  document.addEventListener("keydown", e => {
+    if (e.target.closest && e.target.closest("input, textarea")) return;
+    const k = e.key.toLowerCase();
+    if (k === "o") { mostrar = !mostrar; pintarPresentador(); }
+    if (k === "m") { vistaB = vistaB === "matriz" ? "ranking" : "matriz"; pintarPresentador(); }
+    if (k === "q") { verQR = !verQR; pintarPresentador(); }
+  });
+  const tick = async () => {
+    const nuevas = await traerNuevas(estado.codigo, ultimoId);
+    if (nuevas.length) {
+      ultimoId = nuevas[nuevas.length - 1].id;
+      filas = filas.concat(nuevas);
+      pintarPresentador();
+    }
+  };
+  await tick();
+  setInterval(tick, 3000);
+}
+
+async function cicloParticipante() {
+  const tick = async () => {
+    const previo = estado ? estado.pregunta_activa + "|" + estado.abierta + "|" + estado.codigo : "";
+    estado = await leerEstado();
+    cargando = false;
+    const ahora = estado ? estado.pregunta_activa + "|" + estado.abierta + "|" + estado.codigo : "";
+    if (previo !== ahora) pintarParticipante();
+  };
+  pintarParticipante();
+  await tick();
+  pintarParticipante();
+  setInterval(tick, 4000);
+}
+
+const ruta = location.hash.replace("#", "");
+if (ruta.startsWith("presenta")) pedirClave();
+else if (ruta.startsWith("resumen")) cicloResumen();
+else cicloParticipante();
+</script>
+</body>
+</html>
