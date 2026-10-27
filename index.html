@@ -52,14 +52,14 @@ button { font-family: inherit; cursor: pointer; }
 /* ── Topbar (styles.css) ── */
 .topbar {
   position: sticky; top: 0; z-index: 50;
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
   padding: 12px 24px;
   background: linear-gradient(135deg, var(--azul), #23498a);
   color: var(--blanco); box-shadow: var(--sombra-md);
 }
 .topbar-title { font-family: var(--font-titulos); font-weight: 600; font-size: 20px; line-height: 1.15; }
 .topbar-sub { font-size: 12.5px; opacity: .8; margin-top: 1px; }
-.topbar-right { display: flex; align-items: center; gap: 10px; font-size: 13px; flex-wrap: wrap; justify-content: flex-end; }
+.topbar-right { display: flex; align-items: center; gap: 10px; font-size: 13px; flex-wrap: wrap; justify-content: flex-end; min-width: 0; }
 .topbar-badge { background: rgba(255,255,255,.14); border-radius: 999px; padding: 4px 12px; font-size: 12px; white-space: nowrap; }
 .topbar-badge.vivo { background: var(--verde-lt); color: var(--verde); font-weight: 600; }
 .topbar-badge.local { background: var(--amarillo-lt); color: #8a6d00; font-weight: 600; }
@@ -188,12 +188,13 @@ table.matriz { border-collapse: separate; border-spacing: 4px; width: 100%; tabl
 .conexion .n { flex: none; font-family: var(--font-titulos); font-weight: 700; font-size: clamp(20px, 1.8vw, 28px); color: var(--azul); }
 
 /* ── Pantalla de espera ── */
-.espera { flex: 1; display: grid; grid-template-columns: auto minmax(0, 560px); gap: 56px; align-items: center; justify-content: center; }
+.espera { flex: 1; display: grid; grid-template-columns: auto minmax(0, 620px); gap: clamp(28px, 4vw, 72px); align-items: center; justify-content: center; }
+.espera .titulo-grande { font-size: clamp(32px, 4.2vw, 64px); }
 .qr-caja { background: var(--blanco); padding: 20px; border-radius: var(--radio-lg); box-shadow: var(--sombra-md); }
-.espera-txt { color: var(--gris-txt); font-size: clamp(16px, 1.4vw, 20px); margin: 18px 0 6px; }
-.url-txt { font-family: ui-monospace, monospace; font-size: clamp(15px, 1.4vw, 21px); color: var(--azul-mid);
+.espera-txt { color: var(--gris-txt); font-size: clamp(17px, 1.7vw, 26px); margin: 22px 0 8px; }
+.url-txt { font-family: ui-monospace, monospace; font-size: clamp(16px, 1.8vw, 28px); color: var(--azul-mid);
   font-weight: 600; word-break: break-all; }
-.espera-nota { color: var(--gris-txt); font-size: 14px; margin-top: 18px; line-height: 1.5; }
+.espera-nota { color: var(--gris-txt); font-size: clamp(14px, 1.15vw, 18px); margin-top: 22px; line-height: 1.5; }
 
 .tapado { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; gap: 10px; padding: 50px 20px; background: var(--blanco); border-radius: var(--radio-lg);
@@ -829,7 +830,9 @@ function pintarPresentador() {
         <div class="atajos">Atajos: <kbd>O</kbd> ocultar/mostrar resultados · <kbd>M</kbd> matriz/ranking · <kbd>Q</kbd> pantalla QR</div>
       </div></div></div>`;
 
-  ponerQR("qrGrande", 280);
+  // el QR de la espera ocupa todo el alto disponible (topbar + consola + padding fuera)
+  const reserva = consolaAbierta ? 300 : 170;
+  ponerQR("qrGrande", Math.round(Math.max(240, Math.min(innerHeight - reserva, innerWidth * 0.42, 640))));
   ponerQR("qrChico", 84);
 
   $("#toggle").onclick = () => { consolaAbierta = !consolaAbierta; pintarPresentador(); };
